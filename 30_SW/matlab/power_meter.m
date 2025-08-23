@@ -14,11 +14,19 @@ I_amp = 100 * sqrt(2);      % Current amplitude (Amps)
 phi = deg2rad(30);        % Phase shift of current (radians, e.g., 30° lag)
 
 % --- Time vector ---
-t = 0:1/fs:T;         
+t = 0:1/fs:T;
 
 % --- Generate signals ---
 voltage = V_amp * sin(2*pi*f_signal*t);
 current = I_amp * sin(2*pi*f_signal*t - phi);
+
+% Add harmonics (example: 3rd and 5th)
+V3 = 0.2 * V_amp;   % 20% amplitude of fundamental
+V5 = 0.1 * V_amp;   % 10% amplitude
+I3 = 0.15 * I_amp;  % 15% amplitude
+I5 = 0.05 * I_amp;  % 5% amplitude
+voltage = voltage + V3*sin(2*pi*(3*f_signal)*t) + V5*sin(2*pi*(5*f_signal)*t);
+current = current + I3*sin(2*pi*(3*f_signal)*t - phi) + I5*sin(2*pi*(5*f_signal)*t - phi);
 
 % --- RMS calculations ---
 Vrms = sqrt(mean(voltage.^2));
